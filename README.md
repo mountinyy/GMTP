@@ -1,6 +1,6 @@
 # GMTP
 
-Official repo of ACL 2025 Findings paepr: [Safeguarding RAG Pipelines with GMTP: A Gradient-based Masked Token Probability Method for Poisoned Document Detection](https://arxiv.org/abs/2507.18202).
+Official repo of ACL 2025 Findings paepr: [Safeguarding RAG Pipelines with GMTP: A Gradient-based Masked Token Probability Method for Poisoned Document Detection](https://arxiv.org/abs/2507.18202). Code will be updated soon.
 
 
 ## 🚀 Features
