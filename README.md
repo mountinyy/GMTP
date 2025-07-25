@@ -37,7 +37,7 @@ Run Pyserini to index clean / attacked documents.
 ```
 bash scripts/run_faiss_indexing.sh
 ```
-Now we are ready to run GTMP against various attacks! Run the code below to reproduce the result. Otherwise, you may use code in `PATH_TO_GMTP` for GMTP.
+Now we are ready to run GTMP against various attacks! Run the code below to reproduce the result.
 
 
 # References
