@@ -81,13 +81,11 @@ bash scripts/run_main.sh
 # Citation
 If you use this code, please cite the following our paper:
 ```
-@misc{kim2025safeguardingragpipelinesgmtp,
-      title={Safeguarding RAG Pipelines with GMTP: A Gradient-based Masked Token Probability Method for Poisoned Document Detection}, 
-      author={San Kim and Jonghwi Kim and Yejin Jeon and Gary Geunbae Lee},
-      year={2025},
-      eprint={2507.18202},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2507.18202}, 
+@inproceedings{kim2025safeguarding,
+  title={Safeguarding RAG Pipelines with GMTP: A Gradient-based Masked Token Probability Method for Poisoned Document Detection},
+  author={Kim, San and Kim, Jonghwi and Jeon, Yejin and Lee, Gary},
+  booktitle={Findings of the Association for Computational Linguistics: ACL 2025},
+  pages={24597--24614},
+  year={2025}
 }
 ```
