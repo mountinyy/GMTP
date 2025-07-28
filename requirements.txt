@@ -1,0 +1,35 @@
+# torch==2.5.1
+backports.functools-lru-cache==1.6.4
+black==22.3.0
+entrypoints==0.4
+flake8==4.0.1
+ipython-genutils==0.2.0
+ipywidgets==8.0.4
+isort==5.10.1
+matplotlib==3.7.1
+nbformat==5.7.3
+pandas==1.5.3
+pip-chill==1.0.1
+pre-commit==2.17.0
+pytest==7.0.1
+torchmetrics==0.11.3
+wandb==0.13.11
+nltk==3.8.1
+hydra-core==1.3.2
+accelerate==1.0.1
+openai==1.58.1
+transformers==4.47.1
+omegaconf==2.3.0
+pyserini==0.43.0
+numpy==1.26.4
+jsonlines==4.0.0
+datasets==3.2.0
+faiss-gpu-cu12
+faiss-cpu
+# faiss-gpu==1.7.2
+pyserini==0.43.0
+ir-measures
+rouge-score
+
+# conda install -c conda-forge openjdk=21 maven -y
+# conda install -c pytorch faiss-gpu -y

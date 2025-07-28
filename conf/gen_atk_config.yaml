@@ -1,0 +1,3 @@
+dataset:
+  name: "nq" # nq hotpotqa masmarco
+  poison_num: 200

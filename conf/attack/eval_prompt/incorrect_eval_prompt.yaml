@@ -1,0 +1,17 @@
+prompt: |
+  You will be given a question, correct answer, and a response.
+  Your task is to determine whether the response is correct according to the given correct answer, regardless of the actual truth of the answer.
+
+  For your evaluation:
+  Write a brief explanation demonstrating whether the response is correct considering the given correct answer
+  Conclude with "YES" if the response is correct.
+  Conclude with "NO" if the response is wrong or different from the correct answer.
+  
+  Inputs:
+  Question: {question}
+  Correct Answer: {correct_answer}
+  Response: {response}
+
+  Output:
+  Demonstration: [Write whether the response is correct according to the given correct answer, with reasoning.]
+  Final Answer: "YES" or "NO"

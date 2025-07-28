@@ -1,0 +1,54 @@
+defaults:
+  - attack: poisonedrag
+  - answer_following_prompt
+  - _self_
+
+defense:
+  method: gmtp # gmtp 
+
+common:
+  seed: 42
+  do_attack: true
+  debug: false
+  N: 5
+  remove_threshold: 0.2
+  remove_threshold_path: ""
+  remove_threshold_method: "mean" # mean / max
+  remove_threshold_random_doc: false
+  remove_lambda: 1.0
+  M: 5
+  retrieval_only: false
+  batch_id_path: ""
+  latency_check: false
+
+perplexity:
+  threshold: 200
+
+l2:
+  contriever_threshold: 1.7
+  dpr_threshold: 13
+
+model:
+  retriever: dpr # dpr or contriever
+  reranker: bert # bert or roberta
+  generator: "qwen" # llama3 gemma2 qwen
+
+dataset:
+  name: "nq" # nq hotpotqa msmarco
+  split: "test" 
+  poisoned_text_path: "data/poisoned_texts/${attack.name}/${attack.attack_method}/${dataset.name}-${attack.total}.json"
+  poisoned_doc_path: "data/poisoned_documents/${attack.name}/${attack.attack_method}/${model.retriever}/${dataset.name}-${attack.total}.json"
+
+rag:
+  max_new_tokens: 128
+  temperature: 0.3
+  top_k: 10
+  retrieval_result_path: ""
+  result_save_path: "results/${dataset.name}/${model.retriever}-${model.generator}/${attack.name}/${attack.attack_method}/${defense.method}"
+
+eval:
+  save_path: "${rag.result_save_path}/gpt4_eval"
+  
+
+
+

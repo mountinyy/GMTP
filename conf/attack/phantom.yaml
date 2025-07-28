@@ -1,0 +1,9 @@
+defaults:
+ - eval_prompt: incorrect_eval_prompt
+
+name: phantom
+score_function: "dot" # dot or cos_sim
+adv_per_query: 5
+attack_method: "hotflip" # hotflip or query_target
+num_adv_passage_tokens: 30
+total: 200

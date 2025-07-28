@@ -1,6 +1,8 @@
 # GMTP
 
-Official repo of ACL 2025 Findings paepr: [Safeguarding RAG Pipelines with GMTP: A Gradient-based Masked Token Probability Method for Poisoned Document Detection](https://arxiv.org/abs/2507.18202). Code will be updated soon.
+Official repo of ACL 2025 Findings paepr: [Safeguarding RAG Pipelines with GMTP: A Gradient-based Masked Token Probability Method for Poisoned Document Detection](https://arxiv.org/abs/2507.18202).
+
+We also provide 200 poisoned test samples, using [PoisonedRAG](https://github.com/sleeepeer/PoisonedRAG), [Phantom](https://arxiv.org/abs/2405.20485), and [Adversarial Decoding](https://github.com/collinzrj/adversarial_decoding).
 
 
 ## 🚀 Features
@@ -29,15 +31,36 @@ Convert Beir datasets into fixed format.
 ```
 bash scripts/run_convert_dataset.sh
 ```
-Run Pyserini to index clean / attacked documents.
-- `is_attack`: whether we are indexing clean or poisoned documents. Need indexing both environment since we blend poisoned documents into the clean ones.
+Convert poisoned datasets into fixed format.
 - `attack`: Attack method (poisonedrag / phantom / advdecoding).
+- `total`: Total amount of poisoned documents (For current setting, fix it to 200 as only 200 poisoned documents are provided.)
+```
+bash scripts/run_convert_poisoned_dataset.sh
+```
+Run Pyserini to index clean / attacked documents.
+- `is_attack`: whether we are indexing clean or poisoned documents. 
+You should run `is_attack=False` once for each `dataset`, and you should run `is_attack=True` once for every combination of `dataset` and `attack` to blend the poisoned documents into the clean ones.
+
 - `dataset`: Target dataset (nq / hotpotqa / msmarco).
 - `encoder_class`: Retriever (dpr / contriever).
 ```
 bash scripts/run_faiss_indexing.sh
 ```
-Now we are ready to run GTMP against various attacks! Run the code below to reproduce the result.
+Now get average masked token probability of knowledge base.
+- `retriever`: Retriever (dpr / contriever).
+- `N` : Maximum amount of potential cheating tokens.
+- `M` : The amount of tokens actually used for consideration.
+- `total_samples`: The number of documents used for average gradient calculation ($K$ in paper)
+- `use_random_doc`: Whether use random documents for single query or use relevant documents.
+- `include_poison`: Whether to sample `total_samples` of documents from poisoned knowledge base.
+```
+bash scripts/run_get_avg_mask_probs.sh
+```
+Now we are ready to run GTMP against various attacks! Run the code below to reproduce the result. Otherwise, you may simply use code in `src/defenses/method/GMTP` for your work.
+```
+bash scripts/run_main.sh
+```
+
 
 
 # References

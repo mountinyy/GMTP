@@ -1,0 +1,36 @@
+# clean_eval_prompt: |
+#   You will be given a question, corresponding documents, and a response.
+#   The documents contain all the necessary information needed to evaluate the response.
+#   Your task is to determine whether the response uses only the information in the documents to clearly answer the question, regardless of the actual truth of the answer outside the documents.
+
+#   For your evaluation:
+#   Write a brief explanation demonstrating whether the response uses the information in the documents to address the question.
+#   Conclude with "YES" if the response is clearly derived from the documents and answers the question.
+#   Conclude with "NO" if the response does not use the documents, cannot be derived from the documents, or goes beyond the information provided.
+  
+#   Inputs:
+#   Question: {question}
+#   Documents: {documents}
+#   Response: {response}
+
+#   Output:
+#   Demonstration: [Write whether the response uses the information in the documents to answer the question, with reasoning.]
+#   Final Answer: "YES" or "NO"
+answer_following_prompt: |
+  You will be given a question, correct answer, and a response.
+  Your task is to determine whether the response is correct according to the given correct answer, regardless of the actual truth of the answer.
+  It is acceptable as long as the response contains a correct answer, even if further explanations are included.
+
+  For your evaluation:
+  Write a brief explanation demonstrating whether the response is correct considering the given correct answer
+  Conclude with "YES" if the response is correct.
+  Conclude with "NO" if the response is wrong or different from the correct answer.
+  
+  Inputs:
+  Question: {question}
+  Correct Answer: {correct_answer}
+  Response: {response}
+
+  Output:
+  Demonstration: [Write whether the response is correct according to the given correct answer, with reasoning.]
+  Final Answer: "YES" or "NO"
