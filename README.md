@@ -60,6 +60,16 @@ Now we are ready to run GTMP against various attacks! Run the code below to repr
 ```
 bash scripts/run_main.sh
 ```
+- `retrieval_only`: Whether run only retrieval phase or until the generation phase.
+- `latency_check`: Whether check latency.
+- `debug`: Debug mode, using only 10 test samples.
+- `api_key`: Input your OpenAI API key.
+- `defense_method`: defense baselines (GMTP, PPL, L2).
+- `reranker`: MLM of reranker. Can be either `bert` or `roberta`.
+- `remove_threshold`: default remove threshold of GMTP. If higher than 0, it will use fixed remove threshold instead of calculated one from `run_get_avg_mask_probs.sh`.
+- `use_random_doc`: Whether to use threshold calculated by random corpus or related corpus.
+- `retrieve_k`: top-2k.
+- `rerank_k`: top-k.
 
 
 
