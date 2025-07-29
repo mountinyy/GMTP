@@ -2,7 +2,6 @@ import torch
 from tqdm import tqdm
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-
 DEFAULT_PROMPT = """"You are a helpful assistant.
 Your task is to answer user queries accurately and concisely based on the information provided in the given contexts.
 You may generalize or infer an answer if it is logically supported by the context, but do not introduce information that is not present or cannot be reasonably inferred.

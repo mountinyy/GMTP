@@ -1,3 +1,6 @@
+from typing import Optional
+
+import numpy as np
 import torch
 from transformers import (
     AutoModel,
@@ -8,7 +11,6 @@ from transformers import (
     DPRQuestionEncoder,
     DPRQuestionEncoderTokenizerFast,
 )
-import numpy as np
 
 
 class GradientStorage:
@@ -41,16 +43,16 @@ def get_embeddings(model):
 
 class GMTP:
     def __init__(
-            self, 
-            ret_type, 
-            model_name, 
-            question_encoder_name=None, 
-            reranker="bert-base-uncased", 
-            N=10, 
-            M=5, 
-            remove_threshold=-1.0, 
-            remove_lambda=1.0
-        ):
+        self,
+        ret_type: str,
+        model_name: str,
+        question_encoder_name: Optional[str] = None,
+        reranker: str = "bert-base-uncased",
+        N: int = 10,
+        M: int = 5,
+        remove_threshold: float = -1.0,
+        remove_lambda: float = 1.0,
+    ):
         assert ret_type in ["dpr", "contriever"], "GMTP is only supported for DPR and Contriever retrievers."
         # Retriever setup
         self.ret_type = ret_type
@@ -85,7 +87,7 @@ class GMTP:
         self.remove_lambda = remove_lambda
 
         # Print
-        print("="*10 + " GMTP Config " + "="*10)
+        print("=" * 10 + " GMTP Config " + "=" * 10)
         print(f"Retriever type: {self.ret_type}")
         print(f"Document encoder: {model_name}")
         if question_encoder_name is None:
@@ -98,7 +100,7 @@ class GMTP:
         print(f"M: {self.M}")
         print(f"Remove threshold: {self.remove_threshold}")
         print(f"Remove lambda: {self.remove_lambda}")
-        print("="*30)
+        print("=" * 30)
 
     def filter_documents(self, question, documents, topk=10, do_sort=False, doc_ids=None):
         doc_infos = []
@@ -141,7 +143,7 @@ class GMTP:
                     masked_probs = self.get_mask_probs(text=doc, mask_indices=top_indices)
                     masked_probs = np.sort(masked_probs)
                     masked_probs = masked_probs[: self.M]
-            
+
             if len(top_indices) == 0:
                 sim = info["sim"]
             else:
@@ -151,7 +153,6 @@ class GMTP:
 
             avg_masked_prob = np.mean(masked_probs)
             doc_infos[j]["avg_masked_prob"] = avg_masked_prob
-            
 
         sim_sorted_doc_infos = sorted(doc_infos, key=lambda x: x["sim"], reverse=True) if do_sort else doc_infos
 
@@ -165,7 +166,12 @@ class GMTP:
     @torch.no_grad()
     def get_masked_sim(self, topk_indices, q_model, query, c_model, context, score_function="dot"):
         masked_emb, masked_text = self.get_emb(
-            texts=context, mask_indices=topk_indices, return_text=True, padding=True, truncation=True, is_document_encoder=True
+            texts=context,
+            mask_indices=topk_indices,
+            return_text=True,
+            padding=True,
+            truncation=True,
+            is_document_encoder=True,
         )
         masked_emb = masked_emb.detach().cpu()
         query_emb = self.get_emb(texts=query, is_document_encoder=False).detach().cpu()
@@ -175,8 +181,6 @@ class GMTP:
             sim = torch.cosine_similarity(masked_emb, query_emb).item()
 
         return sim, masked_text
-
-
 
     def convert_tokens(self, text, mask_indices, max_length=512):
         # Tokenize the text with both tokenizers, asking for offset mappings
@@ -235,7 +239,16 @@ class GMTP:
         else:
             return self.q_encoder, self.q_tokenizer
 
-    def get_emb(self, texts=None, inputs=None, mask_indices=None, remove_indices=None, return_text=False, is_document_encoder=False, **kwargs):
+    def get_emb(
+        self,
+        texts=None,
+        inputs=None,
+        mask_indices=None,
+        remove_indices=None,
+        return_text=False,
+        is_document_encoder=False,
+        **kwargs,
+    ):
         model, tokenizer = self._get_model_tokenizer(is_document_encoder)
         if "padding" not in kwargs:
             kwargs["padding"] = True
@@ -247,7 +260,7 @@ class GMTP:
             inputs = {k: v.to(model.device) for k, v in inputs.items()}
         if mask_indices is not None:
             inputs["input_ids"][0][mask_indices] = tokenizer.mask_token_id
-        
+
         if self.ret_type == "dpr":
             embeddings = model(**inputs).pooler_output
         else:
@@ -281,12 +294,9 @@ class GMTP:
         if text2 is None:
             inputs = tokenizer(text1, return_tensors="pt", padding=True, truncation=True).to(model.device)
         else:
-            inputs = tokenizer(text1, text2, return_tensors="pt", padding=True, truncation=True).to(
-                model.device
-            )
+            inputs = tokenizer(text1, text2, return_tensors="pt", padding=True, truncation=True).to(model.device)
         output = model(**inputs, output_attentions=True)
         return torch.stack(output["attentions"]).detach().cpu().squeeze()  # [layer, head, seq, seq]
-        
 
     def get_last_hidden_states(self, text):
         model, tokenizer = self._get_model_tokenizer(is_document_encoder=True)

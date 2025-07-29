@@ -173,9 +173,7 @@ def get_ppl(model, tokenizer, text):
     return math.exp(loss.item())
 
 
-def apply(
-    conf, q_model, c_model, corpus, p_corpus, poison_infos, retrieval_results, qrels, return_output_text=False
-):
+def apply(conf, q_model, c_model, corpus, p_corpus, poison_infos, retrieval_results, qrels, return_output_text=False):
     poison_recalls = []
     return_outputs = []
     pos_in_topk = 0
@@ -219,7 +217,14 @@ def apply(
 
     print()
     ndcg_data = defaultdict(list)
-    threshold_path = os.path.join(os.path.dirname(conf.common.remove_threshold_path), "random_" + os.path.basename(conf.common.remove_threshold_path)) if conf.common.remove_threshold_random_doc else conf.common.remove_threshold_path
+    threshold_path = (
+        os.path.join(
+            os.path.dirname(conf.common.remove_threshold_path),
+            "random_" + os.path.basename(conf.common.remove_threshold_path),
+        )
+        if conf.common.remove_threshold_random_doc
+        else conf.common.remove_threshold_path
+    )
     if conf.common.remove_threshold > 0:
         print("Using fixed remove threshold: ", conf.common.remove_threshold, flush=True)
         conf.common.remove_lambda = 1.0
@@ -230,7 +235,8 @@ def apply(
     else:
         print("Failed to load remove threshold from", conf.common.remove_threshold_path, flush=True)
     print(
-        f"Setting remove threshold to {conf.common.remove_threshold} * {conf.common.remove_lambda} -> {conf.common.remove_threshold * conf.common.remove_lambda}", flush=True
+        f"Setting remove threshold to {conf.common.remove_threshold} * {conf.common.remove_lambda} -> {conf.common.remove_threshold * conf.common.remove_lambda}",
+        flush=True,
     )
     print()
 
@@ -461,7 +467,9 @@ def apply(
     outputs += f"[Attack: {conf.attack.name}, Method: {conf.attack.attack_method} Dataset: {conf.dataset.name}, Retriever: {conf.model.retriever}, N: {conf.common.N}, M: {conf.common.M},  reranker: {conf.model.reranker}]\n"
     outputs += f"[Defense: {conf.defense.method}]\n"
     if removed_doc_cnt > 0:
-        outputs += f"GT FPR: {gt_eval['removed_cnt']/removed_doc_cnt:.3f} ({gt_eval['removed_cnt']} / {removed_doc_cnt})\n"
+        outputs += (
+            f"GT FPR: {gt_eval['removed_cnt']/removed_doc_cnt:.3f} ({gt_eval['removed_cnt']} / {removed_doc_cnt})\n"
+        )
     else:
         outputs += "GT FPR: No GT removed\n"
     if conf.defense.method == "perplexity":

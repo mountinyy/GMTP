@@ -11,11 +11,11 @@ from openai import OpenAI
 from tqdm import tqdm
 
 from src.defenses.filter import apply
+from src.defenses.method import GMTP
 from src.evaluation import gpt4_measure_by_answer, print_gpt4_eval_results
 from src.generator import Generator
 from src.utils.base import load_retrievers, search_poisoned_doc_by_query_id, search_poisoned_doc_by_text, set_seed
 from src.utils.beir_utils import load_dataset as load_beir_dataset
-from src.defenses.method import GMTP
 
 
 def load_dataset(conf):
@@ -193,7 +193,8 @@ def main(conf):
         incorrect_answers.append(info["incorrect_answer"])
         correct_answers.append(info["correct_answer"])
     print(
-        f"Poisoned retrievals : {poisoned_retrievals / len(topk_results):.3f} ({poisoned_retrievals}/{len(topk_results)})", flush=True
+        f"Poisoned retrievals : {poisoned_retrievals / len(topk_results):.3f} ({poisoned_retrievals}/{len(topk_results)})",
+        flush=True,
     )
 
     gen_output = ""
@@ -241,11 +242,15 @@ def main(conf):
 
     end_time = time.perf_counter()
     latency = (end_time - start_time) * 1000
-    
+
     print("=" * 50, flush=True)
-    print(f"[Attack: {conf.attack.name} | Method: {conf.attack.attack_method} | Defense: {conf.defense.method}]", flush=True)
     print(
-        f"[Dataset: {conf.dataset.name} | Retriever: {conf.model.retriever} | Generator: {conf.model.generator}]", flush=True
+        f"[Attack: {conf.attack.name} | Method: {conf.attack.attack_method} | Defense: {conf.defense.method}]",
+        flush=True,
+    )
+    print(
+        f"[Dataset: {conf.dataset.name} | Retriever: {conf.model.retriever} | Generator: {conf.model.generator}]",
+        flush=True,
     )
     if ret_output_text:
         print("[Retrieval Analysis]", flush=True)

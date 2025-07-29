@@ -369,7 +369,7 @@ if __name__ == "__main__":
         exit()
 
     # Check PRF Flag
-    if args.prf_depth > 0 and type(searcher) == FaissSearcher:
+    if args.prf_depth > 0 and type(searcher) is FaissSearcher:
         PRF_FLAG = True
         if args.prf_method.lower() == "avg":
             prfRule = DenseVectorAveragePrf()
@@ -378,7 +378,7 @@ if __name__ == "__main__":
                 args.rocchio_alpha, args.rocchio_beta, args.rocchio_gamma, args.rocchio_topk, args.rocchio_bottomk
             )
         # ANCE-PRF is using a new query encoder, so the input to DenseVectorAncePrf is different
-        elif args.prf_method.lower() == "ance-prf" and type(query_encoder) == AnceQueryEncoder:
+        elif args.prf_method.lower() == "ance-prf" and type(query_encoder) is AnceQueryEncoder:
             if os.path.exists(args.sparse_index):
                 sparse_searcher = LuceneSearcher(args.sparse_index)
             else:
